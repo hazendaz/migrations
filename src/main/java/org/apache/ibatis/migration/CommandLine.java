@@ -19,7 +19,8 @@ import static org.apache.ibatis.migration.options.OptionsParser.parse;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.ibatis.migration.commands.Command;
 import org.apache.ibatis.migration.commands.Commands;
@@ -100,7 +101,7 @@ public class CommandLine {
       }
 
       console.printf("-- Total time: %ss%n", (System.currentTimeMillis() - start) / 1000);
-      console.printf("-- Finished at: %s%n", new Date());
+      console.printf("-- Finished at: %s%n", LocalDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
       printMemoryUsage();
       console.printf("------------------------------------------------------------------------%n");
     }
