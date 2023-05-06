@@ -30,13 +30,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.ServiceLoader;
-import java.util.TimeZone;
 
 import org.apache.ibatis.migration.Change;
 import org.apache.ibatis.migration.ConnectionProvider;
@@ -59,7 +59,7 @@ import org.apache.ibatis.migration.options.SelectedPaths;
 import org.apache.ibatis.migration.utils.Util;
 
 public abstract class BaseCommand implements Command {
-  private static final String DATE_FORMAT = "yyyyMMddHHmmss";
+  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
   protected static final String DESC_CREATE_CHANGELOG = "create changelog";
 
   private ClassLoader driverClassLoader;
@@ -138,10 +138,8 @@ public abstract class BaseCommand implements Command {
   }
 
   private String generateTimestampId() {
-    final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-    final Date now = new Date();
-    dateFormat.setTimeZone(TimeZone.getTimeZone(environment().getTimeZone()));
-    return dateFormat.format(now);
+    final LocalDateTime now = LocalDateTime.now();
+    return now.atZone(ZoneId.of(environment().getTimeZone())).format(DATE_FORMAT);
   }
 
   protected void copyResourceTo(String resource, File toFile) {

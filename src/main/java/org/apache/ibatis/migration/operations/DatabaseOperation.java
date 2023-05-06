@@ -18,8 +18,9 @@ package org.apache.ibatis.migration.operations;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.apache.ibatis.migration.Change;
@@ -27,6 +28,8 @@ import org.apache.ibatis.migration.MigrationException;
 import org.apache.ibatis.migration.options.DatabaseOperationOption;
 
 public abstract class DatabaseOperation {
+
+  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
   protected void insertChangelog(Change change, Connection con, DatabaseOperationOption option) {
     try {
@@ -98,7 +101,7 @@ public abstract class DatabaseOperation {
   }
 
   public static String generateAppliedTimeStampAsString() {
-    return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.sql.Date(System.currentTimeMillis()));
+    return new Date(System.currentTimeMillis()).toLocalDate().format(DATE_FORMAT);
   }
 
   protected void println(PrintStream printStream) {
