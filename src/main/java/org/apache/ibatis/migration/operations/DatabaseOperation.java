@@ -81,8 +81,7 @@ public abstract class DatabaseOperation {
 
   protected ScriptRunner getScriptRunner(Connection connection, DatabaseOperationOption option,
       PrintStream printStream) {
-    try {
-      PrintWriter outWriter = printStream == null ? null : new PrintWriter(printStream);
+    try (PrintWriter outWriter = printStream == null ? null : new PrintWriter(printStream)) {
       ScriptRunner scriptRunner = new ScriptRunner(connection);
       scriptRunner.setLogWriter(outWriter);
       scriptRunner.setErrorLogWriter(outWriter);
